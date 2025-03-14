@@ -85,30 +85,28 @@
         const message = document.getElementById("promptInput").value;
         document.getElementById(
           "chat"
-        ).innerHTML = `<p class="userMessage">${message}</p>`;
-        // fetch("http://localhost:3001/prompt", {
-        //   method: "POST",
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: JSON.stringify({
-        //     chat_id: 232,
-        //     message: document.getElementById("promptInput").value,
-        //     config: { chat_model_id: "meta.llama3-8b-instruct-v1:0" },
-        //     metadata: {},
-        //   }),
-        // })
-        //   .then((response) => {
-        //     if (!response.ok) {
-        //       throw new Error(`HTTP error! Status: ${response.status}`);
-        //     }
-        //     return response.json();
-        //   })
-        //   .then((result) => {
-        document.getElementById("chat").innerHTML += `<p class="agentMessage">${
-          /* result?.message?.content[0]?.text || */ "Default response"
-        }</p>`;
-        // });
+        ).innerHTML += `<p class="userMessage">${message}</p>`;
+        fetch("http://localhost:3001/prompt", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            chatId: 245,
+            message: document.getElementById("promptInput").value,
+          }),
+        })
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+            return response.json();
+          })
+          .then((result) => {
+            document.getElementById(
+              "chat"
+            ).innerHTML += `<p class="agentMessage">${result?.text}</p>`;
+          });
       };
     </script>
   </body>

@@ -11,13 +11,13 @@ app.use(express.json());
 app.post("/prompt", async (req, res) => {
   try {
     const response = await axios.post(
-      "https://api.atlas.zenitech.co.uk/ai/chat/rag",
+      "https://api.atlas.zenitech.co.uk/api/chat/sendMessage",
       req.body,
       {
         headers: { "Content-Type": "application/json" },
       }
     );
-    res.status(response.status).json(response.data);
+    res.status(response.status).json({ text: response.data });
   } catch (error) {
     console.log("Ivyko klaida!", error);
     res.status(error.response?.status || 500).json({
