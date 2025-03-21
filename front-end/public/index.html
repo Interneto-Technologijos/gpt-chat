@@ -82,10 +82,11 @@
     </div>
     <script>
       const prompt = () => {
-        const message = document.getElementById("promptInput").value;
-        document.getElementById(
-          "chat"
-        ).innerHTML += `<p class="userMessage">${message}</p>`;
+        const promptInput = document.getElementById("promptInput");
+        const message = promptInput.value;
+        const chat = document.getElementById("chat");
+        chat.innerHTML += `<p class="userMessage">${message}</p>`;
+        promptInput.value = "";
         fetch("http://localhost:3001/prompt", {
           method: "POST",
           headers: {
@@ -93,7 +94,7 @@
           },
           body: JSON.stringify({
             chatId: 245,
-            message: document.getElementById("promptInput").value,
+            message,
           }),
         })
           .then((response) => {
@@ -103,9 +104,7 @@
             return response.json();
           })
           .then((result) => {
-            document.getElementById(
-              "chat"
-            ).innerHTML += `<p class="agentMessage">${result?.text}</p>`;
+            chat.innerHTML += `<p class="agentMessage">${result?.text}</p>`;
           });
       };
     </script>
