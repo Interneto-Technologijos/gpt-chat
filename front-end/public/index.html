@@ -77,17 +77,37 @@
       <p class="agentMessage">What is on your mind?</p>
     </div>
     <div id="prompt">
-      <input id="promptInput" />
+      <input id="promptInput" type="text" onkeydown="inputPrompt" />
       <div>
         <button id="promptAction" onclick="prompt()">Send</button>
       </div>
     </div>
     <script>
+      const escapeHtml = (unsafe) => {
+        return unsafe
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      };
+
+      const generateUniqueId = () => {
+        return Math.random().toString(36).substr(2, 9);
+      };
+
+      const inputPrompt = (event) => {
+        console.log(event);
+        if (event.key === "Enter") {
+          prompt();
+        }
+      };
+
       const prompt = () => {
         const promptInput = document.getElementById("promptInput");
         const message = promptInput.value;
         const chat = document.getElementById("chat");
-        chat.innerHTML += `<p class="userMessage">${message}</p>`;
+        chat.innerHTML += `<p class="userMessage">${escapeHtml(message)}</p>`;
         promptInput.value = "";
         fetch("http://localhost:3001/prompt", {
           method: "POST",
@@ -95,19 +115,39 @@
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            chatId: 245,
+            chatId: 261,
             message,
           }),
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(`HTTP error! Status: ${response.status}`);
+        }).then((response) => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+          }
+          const pId = generateUniqueId();
+          chat.innerHTML += `<p id="${pId}" class="agentMessage" />`;
+          const p = document.getElementById(pId);
+
+          var reader = response.body.getReader();
+          var decoder = new TextDecoder();
+
+          const readChunk = () => {
+            return reader.read().then(appendChunks);
+          };
+
+          const appendChunks = (result) => {
+            var chunk = decoder.decode(result.value || new Uint8Array(), {
+              stream: !result.done,
+            });
+            console.log("got chunk of", chunk.length, "bytes");
+            p.innerHTML += chunk;
+            if (result.done) {
+              return;
+            } else {
+              return readChunk();
             }
-            return response.json();
-          })
-          .then((result) => {
-            chat.innerHTML += `<p class="agentMessage">${result?.text}</p>`;
-          });
+          };
+
+          return readChunk();
+        });
       };
     </script>
   </body>

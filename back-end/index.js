@@ -15,9 +15,19 @@ app.post("/prompt", async (req, res) => {
       req.body,
       {
         headers: { "Content-Type": "application/json" },
+        responseType: "stream",
       }
     );
-    res.status(response.status).json({ text: response.data });
+    res.writeHead(200, {
+      "Content-Type": "application/octet-stream",
+      "Transfer-Encoding": "chunked",
+    });
+    response.data.on("data", (chunk) => {
+      res.write(chunk.toString());
+    });
+    response.data.on("end", () => {
+      res.end();
+    });
   } catch (error) {
     console.log("Ivyko klaida!", error);
     res.status(error.response?.status || 500).json({
