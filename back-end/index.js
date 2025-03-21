@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 const https = require("https");
 const fs = require("fs");
 const express = require("express");
@@ -24,7 +26,7 @@ app.post("/new-chat", async (_req, res) => {
   try {
     const response = await axios.post(
       "https://api.atlas.zenitech.co.uk/api/chat/create",
-      { accountId: 78 },
+      { accountId: process.env.ATLAS_ACCOUNT_ID },
       {
         headers: { "Content-Type": "application/json" },
       }
