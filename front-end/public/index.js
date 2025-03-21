@@ -24,7 +24,7 @@ const promptChat = (chatId) => {
   const chat = document.getElementById("chat");
   chat.innerHTML += `<p class="userMessage">${escapeHtml(message)}</p>`;
   promptInput.value = "";
-  return fetch(`http://localhost:3001/prompt-chat/${chatId}`, {
+  return fetch(`/prompt-chat/${chatId}`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -68,7 +68,7 @@ let chatId = null;
 
 const promptMessage = () => {
   if (!chatId) {
-    fetch("http://localhost:3001/new-chat", {
+    fetch("/new-chat", {
       method: "POST",
     })
       .then((response) => {
