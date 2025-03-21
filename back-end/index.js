@@ -8,11 +8,35 @@ const PORT = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.post("/prompt", async (req, res) => {
+app.post("/new-chat", async (_req, res) => {
+  console.log("New chat");
+  try {
+    const response = await axios.post(
+      "https://api.atlas.zenitech.co.uk/api/chat/create",
+      { accountId: 78 },
+      {
+        headers: { "Content-Type": "application/json" },
+      }
+    );
+    console.log(response);
+    res.status(200).send({ chatId: response.data["chatid"] });
+  } catch (error) {
+    console.log("Ivyko klaida!", error);
+    res.status(error.response?.status || 500).json({
+      error: error.message,
+      details: error.response?.data || "Unknown error",
+    });
+  }
+});
+
+app.post("/prompt-chat/:id", async (req, res) => {
   try {
     const response = await axios.post(
       "https://api.atlas.zenitech.co.uk/api/chat/sendMessage",
-      req.body,
+      {
+        chatId: parseInt(req.params.id, 10),
+        message: req.body.message,
+      },
       {
         headers: { "Content-Type": "application/json" },
         responseType: "stream",

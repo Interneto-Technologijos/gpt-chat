@@ -2,74 +2,7 @@
   <head>
     <title>GPT Chat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body {
-        font-family: sans-serif;
-      }
-
-      #promptInput {
-        width: 100%;
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid;
-      }
-
-      #promptAction {
-        padding: 8px;
-        min-width: 100px;
-        border-radius: 8px;
-        border: 1px solid;
-      }
-
-      #prompt {
-        display: flex;
-        flex-direction: column;
-        gap: 8px;
-        align-items: center;
-      }
-
-      .userMessage {
-        text-align: right;
-        width: 100%;
-        color: grey;
-      }
-
-      .agentMessage {
-        text-align: left;
-        width: 100%;
-        color: darkblue;
-      }
-
-      @media only screen and (min-width: 1280px) {
-        #title {
-          padding-left: 33%;
-          width: 33%;
-        }
-        #chat {
-          padding-left: 33%;
-          width: 33%;
-        }
-        #prompt {
-          padding-left: 33%;
-          width: 33%;
-        }
-      }
-
-      @media only screen and (min-width: 640px) and (max-width: 1280px) {
-        #title {
-          padding-left: 25%;
-          width: 50%;
-        }
-        #chat {
-          padding-left: 25%;
-          width: 50%;
-        }
-        #prompt {
-          padding-left: 25%;
-          width: 50%;
-        }
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" href="index.css" />
   </head>
   <body>
     <h1 id="title">GPT Chat</h1>
@@ -79,76 +12,9 @@
     <div id="prompt">
       <input id="promptInput" type="text" onkeydown="inputPrompt" />
       <div>
-        <button id="promptAction" onclick="prompt()">Send</button>
+        <button id="promptAction" onclick="promptMessage()">Send</button>
       </div>
     </div>
-    <script>
-      const escapeHtml = (unsafe) => {
-        return unsafe
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-      };
-
-      const generateUniqueId = () => {
-        return Math.random().toString(36).substr(2, 9);
-      };
-
-      const inputPrompt = (event) => {
-        console.log(event);
-        if (event.key === "Enter") {
-          prompt();
-        }
-      };
-
-      const prompt = () => {
-        const promptInput = document.getElementById("promptInput");
-        const message = promptInput.value;
-        const chat = document.getElementById("chat");
-        chat.innerHTML += `<p class="userMessage">${escapeHtml(message)}</p>`;
-        promptInput.value = "";
-        fetch("http://localhost:3001/prompt", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            chatId: 261,
-            message,
-          }),
-        }).then((response) => {
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const pId = generateUniqueId();
-          chat.innerHTML += `<p id="${pId}" class="agentMessage" />`;
-          const p = document.getElementById(pId);
-
-          var reader = response.body.getReader();
-          var decoder = new TextDecoder();
-
-          const readChunk = () => {
-            return reader.read().then(appendChunks);
-          };
-
-          const appendChunks = (result) => {
-            var chunk = decoder.decode(result.value || new Uint8Array(), {
-              stream: !result.done,
-            });
-            console.log("got chunk of", chunk.length, "bytes");
-            p.innerHTML += chunk;
-            if (result.done) {
-              return;
-            } else {
-              return readChunk();
-            }
-          };
-
-          return readChunk();
-        });
-      };
-    </script>
+    <script src="index.js"></script>
   </body>
 </html>

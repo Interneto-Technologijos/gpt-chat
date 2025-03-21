@@ -1,0 +1,66 @@
+body {
+  font-family: sans-serif;
+}
+
+#promptInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+#promptAction {
+  padding: 8px;
+  min-width: 100px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+#prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+.userMessage {
+  text-align: right;
+  width: 100%;
+  color: grey;
+}
+
+.agentMessage {
+  text-align: left;
+  width: 100%;
+  color: darkblue;
+}
+
+@media only screen and (min-width: 1280px) {
+  #title {
+    padding-left: 33%;
+    width: 33%;
+  }
+  #chat {
+    padding-left: 33%;
+    width: 33%;
+  }
+  #prompt {
+    padding-left: 33%;
+    width: 33%;
+  }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 1280px) {
+  #title {
+    padding-left: 25%;
+    width: 50%;
+  }
+  #chat {
+    padding-left: 25%;
+    width: 50%;
+  }
+  #prompt {
+    padding-left: 25%;
+    width: 50%;
+  }
+}
