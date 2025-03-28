@@ -2,6 +2,12 @@ body {
   font-family: sans-serif;
 }
 
+#title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 #promptInput {
   width: 100%;
   padding: 8px;

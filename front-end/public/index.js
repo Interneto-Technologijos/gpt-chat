@@ -18,7 +18,7 @@ const inputPrompt = (event) => {
   }
 };
 
-const verifyMessage = () => {
+const verify = () => {
   fetch("/verify", {
     method: "GET",
   })
@@ -30,6 +30,18 @@ const verifyMessage = () => {
       return response.json();
     })
     .then((_response) => {});
+};
+
+const logout = () => {
+  fetch("/logout", {
+    method: "POST",
+  })
+    .then((response) => {
+      return response.json();
+    })
+    .then((_response) => {
+      window.location.href = "/login/login.html";
+    });
 };
 
 const promptChat = (chatId) => {
@@ -100,4 +112,4 @@ const promptMessage = () => {
   }
 };
 
-verifyMessage();
+verify();

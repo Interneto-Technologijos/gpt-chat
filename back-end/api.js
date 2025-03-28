@@ -46,6 +46,11 @@ app.post("/login", async (req, res) => {
   return res.status(401).json({ error: "Invalid username or password" });
 });
 
+app.post("/logout", authMiddleware, async (_req, res) => {
+  res.cookie("token", "", { httpOnly: true, secure: true });
+  return res.status(200).json({});
+});
+
 app.get("/verify", authMiddleware, (_req, res) => {
   res.status(200).json({});
 });
