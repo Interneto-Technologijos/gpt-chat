@@ -21,7 +21,12 @@ const authMiddleware = (req, res, next) => {
 app.post("/login", async (req, res) => {
   const { username, password } = req.body;
 
-  if (!username || !password) {
+  if (
+    !username ||
+    !password ||
+    username.length > 100 ||
+    password.length > 100
+  ) {
     return res
       .status(400)
       .json({ error: "Username and password are required" });
@@ -65,11 +70,15 @@ app.post("/new-chat", authMiddleware, async (_req, res) => {
 });
 
 app.post("/prompt-chat/:id", authMiddleware, async (req, res) => {
+  const chatId = parseInt(req.params.id, 10);
+  if (isNaN(chatId) || chatId <= 0 || !Number.isInteger(chatId)) {
+    return res.status(400).json({ error: "Invalid chat ID" });
+  }
   try {
     const response = await axios.post(
       "https://api.atlas.zenitech.co.uk/api/chat/sendMessage",
       {
-        chatId: parseInt(req.params.id, 10),
+        chatId,
         message: req.body.message,
       },
       {
