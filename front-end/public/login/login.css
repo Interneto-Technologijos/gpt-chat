@@ -1,0 +1,47 @@
+body {
+  font-family: sans-serif;
+}
+
+#login {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: center;
+}
+
+#usernameInput,
+#passwordInput {
+  width: 100%;
+  padding: 8px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+#loginAction {
+  padding: 8px;
+  min-width: 100px;
+  border-radius: 8px;
+  border: 1px solid;
+}
+
+@media only screen and (min-width: 1280px) {
+  #title {
+    padding-left: 33%;
+    width: 33%;
+  }
+  #login {
+    padding-left: 33%;
+    width: 33%;
+  }
+}
+
+@media only screen and (min-width: 640px) and (max-width: 1280px) {
+  #title {
+    padding-left: 25%;
+    width: 50%;
+  }
+  #login {
+    padding-left: 25%;
+    width: 50%;
+  }
+}

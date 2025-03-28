@@ -18,6 +18,20 @@ const inputPrompt = (event) => {
   }
 };
 
+const verifyMessage = () => {
+  fetch("/verify", {
+    method: "GET",
+  })
+    .then((response) => {
+      if (!response.ok) {
+        window.location.href = "/login/login.html";
+        return;
+      }
+      return response.json();
+    })
+    .then((_response) => {});
+};
+
 const promptChat = (chatId) => {
   const promptInput = document.getElementById("promptInput");
   const message = promptInput.value;
@@ -85,3 +99,5 @@ const promptMessage = () => {
     promptChat(chatId);
   }
 };
+
+verifyMessage();
